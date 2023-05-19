@@ -1,0 +1,86 @@
+version: "3.9"
+
+services:
+
+  nginx:
+    container_name: "${BASENAME}_nginx"
+    restart: unless-stopped
+    image: nginx:alpine
+    depends_on:
+      - php
+    working_dir: /var/www/html
+    volumes:
+      - ../../:/var/www/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites-available/:/etc/nginx/sites-available
+      - ./nginx/conf.d/:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - lnpm-net
+
+  php:
+    container_name: "${BASENAME}_php"
+    restart: unless-stopped
+    build:
+      context: ./php
+      args:
+        PHP_VER: $PHP_VER
+      #
+      # PHP_XDEBUG: 1
+      # PHP_XDEBUG_DEFAULT_ENABLE: 1
+      # PHP_XDEBUG_REMOTE_CONNECT_BACK: 0
+      # PHP_XDEBUG_REMOTE_HOST: host.docker.internal
+
+    volumes:
+      - ../../:/var/www/html
+    networks:
+      - lnpm-net
+
+
+  mysql:
+    container_name: "${BASENAME}_mysql"
+    restart: unless-stopped
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./db/mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - lnpm-net
+
+#  mariadb:
+#    container_name: "${BASENAME}_mariadb"
+#    restart: unless-stopped
+#    image: mariadb
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root
+#    volumes:
+#      - ./db/mariadb:/var/lib/mysql:delegated
+#    ports:
+#      - 3307:3306
+#    networks:
+#      - lnpm-net
+
+#  pma:
+#    image: phpmyadmin/phpmyadmin:5.0.0
+#    container_name: "${PROJECT_NAME}_pma"
+#    environment:
+#      PMA_HOST: $DB_HOST
+#      PMA_USER: root
+#      PMA_PASSWORD: $DB_ROOT_PASSWORD
+#      PHP_UPLOAD_MAX_FILESIZE: 1G
+#      PHP_MAX_INPUT_VARS: 1G
+#      UPLOAD_LIMIT: 1G
+#    ports:
+#      - "8081:80"
+#    networks:
+#      - suppo-network
+
+networks:
+  lnpm-net:
+    driver: bridge
