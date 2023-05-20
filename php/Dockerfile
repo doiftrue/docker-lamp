@@ -28,6 +28,11 @@ RUN apt-get -y install \
     nano \
     mc
 
+# PHP imagick
+RUN apt-get install -y libmagickwand-dev; \
+    pecl install imagick; \
+	docker-php-ext-enable imagick;
+
 # PHP Extensions
 RUN docker-php-ext-install \
     gd \
@@ -40,6 +45,7 @@ RUN docker-php-ext-install \
     tokenizer \
     opcache \
     exif \
+    intl \
     zip
 
 # fix memory limit for php-cli
@@ -58,7 +64,13 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp
 
-WORKDIR /app
+# redis
+#RUN pecl install -o -f redis \
+#    && rm -rf /tmp/pear \
+#    && docker-php-ext-enable redis
+
+
+WORKDIR /var/www/html
 
 USER $USER
 

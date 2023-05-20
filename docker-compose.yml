@@ -6,14 +6,16 @@ services:
     container_name: "${BASENAME}_nginx"
     restart: unless-stopped
     image: nginx:alpine
-    depends_on:
-      - php
+    depends_on: [ php ]
+    #environment:
+      #SSL_SERTS_DIR: /var/www/html/AAA/SSL
+      #SERVICE: php
     working_dir: /var/www/html
     volumes:
       - ../../:/var/www/html
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/sites-available/:/etc/nginx/sites-available
-      - ./nginx/conf.d/:/etc/nginx/conf.d
+      - ./nginx/include/:/etc/nginx/include
+      - ./nginx/sites-enabled/:/etc/nginx/sites-enabled
     ports:
       - "80:80"
       - "443:443"
@@ -26,12 +28,16 @@ services:
     build:
       context: ./php
       args:
-        PHP_VER: $PHP_VER
+        PHP_VER: 7.4
       #
       # PHP_XDEBUG: 1
       # PHP_XDEBUG_DEFAULT_ENABLE: 1
       # PHP_XDEBUG_REMOTE_CONNECT_BACK: 0
       # PHP_XDEBUG_REMOTE_HOST: host.docker.internal
+    extra_hosts:
+      - "wp-kama.dev:host-gateway" # for wp-cron
+      - "wptest.loc:host-gateway" # for wp-cron
+      - "host.docker.internal:host-gateway"
 
     volumes:
       - ../../:/var/www/html
@@ -49,7 +55,16 @@ services:
     volumes:
       - ./db/mysql:/var/lib/mysql
     ports:
-      - 3306:3306
+      - "3306:3306"
+    networks:
+      - lnpm-net
+
+  redis:
+    container_name: "${BASENAME}_redis"
+    restart: unless-stopped
+    image: redis:alpine
+    ports:
+      - "6379:6379"
     networks:
       - lnpm-net
 
@@ -62,7 +77,7 @@ services:
 #    volumes:
 #      - ./db/mariadb:/var/lib/mysql:delegated
 #    ports:
-#      - 3307:3306
+#      - "3307:3306"
 #    networks:
 #      - lnpm-net
 
