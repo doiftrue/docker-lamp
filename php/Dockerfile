@@ -4,11 +4,12 @@ FROM php:${PHP_VER}-fpm
 ARG UID=1000
 ARG GUID=1000
 ARG USER=www-data
+ARG USERDIR=/var/www/html
 RUN usermod -u $UID $USER && groupmod -g $GUID $USER
 
 # Configuring OS
 RUN echo 'alias ll="ls -l --color"' >>  /etc/bash.bashrc
-RUN chown -R $USER:$USER /var/www
+RUN chown -R $USER:$USER $USERDIR
 
 RUN apt-get update
 
@@ -70,7 +71,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 #    && docker-php-ext-enable redis
 
 
-WORKDIR /var/www/html
+WORKDIR $USERDIR
 
 USER $USER
 

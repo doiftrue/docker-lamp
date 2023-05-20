@@ -1,4 +1,4 @@
-SOMEVAR='bar'
+#SOMEVAR='bar'
 
 ## Docker
 
@@ -17,7 +17,7 @@ dc.recreate:
 php.connect:
 	docker-compose exec php bash
 
-hp.connect.root:
+php.connect.root:
 	docker-compose exec --user=root php bash
 
 ## Composer
@@ -25,13 +25,3 @@ hp.connect.root:
 composer:
 	docker-compose exec php composer $(filter-out $@,$(MAKECMDGOALS))
 
-
-## Linters
-
-lint.php.check.compatibility:
-	docker-compose exec php sh -c 'composer run phpcs-check-compatibility'
-
-# config adaptation is important dev/.phan/config.php
-# the finish message like: "make: *** [phan] Error 1" - it is normal behavior
-phan:
-	docker-compose exec php sh -c './vendor/bin/phan -k dev/.phan/config.php'
