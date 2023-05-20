@@ -8,19 +8,16 @@ services:
     image: nginx:alpine
     depends_on: [ php ]
     #environment:
-      #SSL_SERTS_DIR: /var/www/html/AAA/SSL
+      #SSL_SERTS_DIR: /var/www/AAA/SSL
       #SERVICE: php
-    working_dir: /var/www/html
+    working_dir: /etc/nginx
     volumes:
-      - ../../:/var/www/html
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/include/:/etc/nginx/include:ro
-      - ./nginx/sites-enabled/:/etc/nginx/sites-enabled:ro
-    ports:
-      - "80:80"
-      - "443:443"
-    networks:
-      - lnpm-net
+      - /home/kama/sites/:/var/www
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/include/:/etc/nginx/include
+      - ./nginx/sites-enabled/:/etc/nginx/sites-enabled
+    ports: [ "80:80", "443:443" ]
+    networks: [ lnpm-net ]
 
   php:
     container_name: "${BASENAME}_php"
@@ -38,11 +35,9 @@ services:
       - "wp-kama.dev:host-gateway" # for wp-cron
       - "wptest.loc:host-gateway" # for wp-cron
       - "host.docker.internal:host-gateway"
-
     volumes:
-      - ../../:/var/www/html
-    networks:
-      - lnpm-net
+      - ../../:/var/www
+    networks: [ lnpm-net ]
 
 
   mysql:
@@ -54,19 +49,15 @@ services:
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - ./db/mysql:/var/lib/mysql
-    ports:
-      - "3306:3306"
-    networks:
-      - lnpm-net
+    ports: [ "3306:3306" ]
+    networks: [ lnpm-net ]
 
   redis:
     container_name: "${BASENAME}_redis"
     restart: unless-stopped
     image: redis:alpine
-    ports:
-      - "6379:6379"
-    networks:
-      - lnpm-net
+    ports: [ "6379:6379" ]
+    networks: [ lnpm-net ]
 
 #  mariadb:
 #    container_name: "${BASENAME}_mariadb"
@@ -76,10 +67,8 @@ services:
 #      MYSQL_ROOT_PASSWORD: root
 #    volumes:
 #      - ./db/mariadb:/var/lib/mysql:delegated
-#    ports:
-#      - "3307:3306"
-#    networks:
-#      - lnpm-net
+#    ports: [ "3307:3306" ]
+#    networks: [ lnpm-net ]
 
 #  pma:
 #    image: phpmyadmin/phpmyadmin:5.0.0
@@ -91,10 +80,8 @@ services:
 #      PHP_UPLOAD_MAX_FILESIZE: 1G
 #      PHP_MAX_INPUT_VARS: 1G
 #      UPLOAD_LIMIT: 1G
-#    ports:
-#      - "8081:80"
-#    networks:
-#      - suppo-network
+#    ports: [ "8081:80" ]
+#    networks: [ lnpm-net ]
 
 networks:
   lnpm-net:

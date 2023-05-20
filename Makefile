@@ -20,6 +20,20 @@ php.connect:
 php.connect.root:
 	docker-compose exec --user=root php bash
 
+
+## Nginx
+
+nginx.connect:
+	docker-compose exec nginx sh
+
+
+## Redis
+
+redis.connect:
+	docker-compose exec redis sh
+
+
+
 ## Composer
 
 composer:

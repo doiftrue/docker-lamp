@@ -4,7 +4,7 @@ FROM php:${PHP_VER}-fpm
 ARG UID=1000
 ARG GUID=1000
 ARG USER=www-data
-ARG USERDIR=/var/www/html
+ARG USERDIR=/var/www
 RUN usermod -u $UID $USER && groupmod -g $GUID $USER
 
 # Configuring OS
