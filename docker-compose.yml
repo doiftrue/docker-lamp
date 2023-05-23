@@ -8,11 +8,11 @@ services:
     image: nginx:alpine
     depends_on: [ php ]
     #environment:
-      #SSL_SERTS_DIR: /var/www/AAA/SSL
-      #SERVICE: php
+      #CONTAINER_SERTS_DIR: /var/SSL
     working_dir: /etc/nginx
     volumes:
-      - /home/kama/sites/:/var/www
+      - ${SERTS_DIR}:/var/SSL:ro
+      - ${SITES_DIR}:/var/www:delegated
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/include/:/etc/nginx/include
       - ./nginx/sites-enabled/:/etc/nginx/sites-enabled
@@ -26,17 +26,17 @@ services:
       context: ./php
       args:
         PHP_VER: 7.4
-      #
       # PHP_XDEBUG: 1
       # PHP_XDEBUG_DEFAULT_ENABLE: 1
       # PHP_XDEBUG_REMOTE_CONNECT_BACK: 0
       # PHP_XDEBUG_REMOTE_HOST: host.docker.internal
+
+    # specify your additional domains in `docker-compose.override.yml` file
     extra_hosts:
-      - "wp-kama.dev:host-gateway" # for wp-cron
       - "wptest.loc:host-gateway" # for wp-cron
       - "host.docker.internal:host-gateway"
     volumes:
-      - ../../:/var/www
+      - ${SITES_DIR}:/var/www:delegated
     networks: [ lnpm-net ]
 
 
@@ -48,7 +48,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - ./db/mysql:/var/lib/mysql
+      - ${MYSQL_DATA_DIR}:/var/lib/mysql
     ports: [ "3306:3306" ]
     networks: [ lnpm-net ]
 
@@ -62,11 +62,11 @@ services:
 #  mariadb:
 #    container_name: "${BASENAME}_mariadb"
 #    restart: unless-stopped
-#    image: mariadb
+#    image: mariadb:10.8
 #    environment:
 #      MYSQL_ROOT_PASSWORD: root
 #    volumes:
-#      - ./db/mariadb:/var/lib/mysql:delegated
+#      - ${MARIADB_DATA_DIR}:/var/lib/mysql:delegated
 #    ports: [ "3307:3306" ]
 #    networks: [ lnpm-net ]
 

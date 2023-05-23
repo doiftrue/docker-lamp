@@ -1,2 +1,11 @@
+# files
 .idea
+.env
+docker-compose.override.yml
+
+# dirs
 db/
+
+# nginx
+/nginx/sites-enabled/*
+!/nginx/sites-enabled/default.conf
