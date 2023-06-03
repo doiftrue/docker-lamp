@@ -21,6 +21,11 @@ To add your own site use examples from `nginx/sites-enabled-examples`.
 PHP
 ---
 
+### Redis
+
+For redis work correctly add into the `wp-config.php` file:
+
+   define( 'WP_REDIS_HOST', 'redis' );
 
 
 

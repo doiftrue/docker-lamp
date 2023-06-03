@@ -52,6 +52,7 @@ services:
     ports: [ "3306:3306" ]
     networks: [ lnpm-net ]
 
+  # add `define( 'WP_REDIS_HOST', 'redis' );` to the `wp-config.php` file.
   redis:
     container_name: "${BASENAME}_redis"
     restart: unless-stopped
