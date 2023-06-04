@@ -44,7 +44,7 @@ if [ ! -d "$CA_DIR" ]; then
 	chmod 644 "$CA_DIR/$CA_NAME.crt"
 	chmod 644 "$CA_DIR/$CA_NAME.pem"
 
-	# create copy of .pem with .crt format (it is the way to add it to ubuntu trust store with `sudo update-ca-certificates`)
+	# create copy of .pem with .crt format (it is the way to add it to ubuntu trust store with `update-ca-certificates`)
 	cp "$CA_DIR/$CA_NAME.pem" "$CA_DIR/$CA_NAME.pem.crt"
 fi
 

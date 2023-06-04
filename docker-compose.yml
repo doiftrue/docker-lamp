@@ -21,6 +21,7 @@ services:
     container_name: "${BASENAME}_php"
     restart: unless-stopped
     depends_on: [ mysql ]
+    image: "lamp_php"
     build:
       context: .
       dockerfile: php/Dockerfile

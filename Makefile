@@ -15,10 +15,10 @@ dc.down:
 	docker-compose down --remove-orphans
 
 dc.build:
-	docker-compose up -d --build
+	docker-compose build --force-rm && docker-compose up -d
 
 dc.recreate:
-	docker-compose up -d --no-deps --build $(filter-out $@,$(MAKECMDGOALS))
+	make dc.down && docker-compose build --force-rm --pull && docker-compose up -d
 
 
 
@@ -50,6 +50,13 @@ goto.nginx:
 
 goto.redis:
 	docker-compose exec redis sh
+
+
+
+#### mysql ####
+
+goto.mysql:
+	docker-compose exec mysql sh
 
 
 
