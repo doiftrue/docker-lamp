@@ -9,3 +9,8 @@ db/
 # nginx
 /nginx/sites-enabled/*
 !/nginx/sites-enabled/default.conf
+
+# certs
+/certs/*
+!/certs/create-self-signed-cert.sh
+!/certs/README.md

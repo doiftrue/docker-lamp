@@ -7,12 +7,10 @@ services:
     restart: unless-stopped
     image: nginx:alpine
     depends_on: [ php ]
-    #environment:
-      #CONTAINER_SERTS_DIR: /var/SSL
     working_dir: /etc/nginx
     volumes:
-      - ${SERTS_DIR}:/var/SSL:ro
-      - ${SITES_DIR}:/var/www:delegated
+      - ${SITES_DIR}:/var/app:ro
+      - ${SERTS_DIR}:/etc/nginx/certs:ro
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/include/:/etc/nginx/include
       - ./nginx/sites-enabled/:/etc/nginx/sites-enabled
@@ -22,8 +20,10 @@ services:
   php:
     container_name: "${BASENAME}_php"
     restart: unless-stopped
+    depends_on: [ mysql ]
     build:
-      context: ./php
+      context: .
+      dockerfile: php/Dockerfile
       args:
         PHP_VER: 7.4
       # PHP_XDEBUG: 1
@@ -36,9 +36,8 @@ services:
       - "wptest.loc:host-gateway" # for wp-cron
       - "host.docker.internal:host-gateway"
     volumes:
-      - ${SITES_DIR}:/var/www:delegated
+      - ${SITES_DIR}:/var/app:delegated
     networks: [ lnpm-net ]
-
 
   mysql:
     container_name: "${BASENAME}_mysql"
@@ -52,14 +51,6 @@ services:
     ports: [ "3306:3306" ]
     networks: [ lnpm-net ]
 
-  # add `define( 'WP_REDIS_HOST', 'redis' );` to the `wp-config.php` file.
-  redis:
-    container_name: "${BASENAME}_redis"
-    restart: unless-stopped
-    image: redis:alpine
-    ports: [ "6379:6379" ]
-    networks: [ lnpm-net ]
-
 #  mariadb:
 #    container_name: "${BASENAME}_mariadb"
 #    restart: unless-stopped
@@ -71,18 +62,13 @@ services:
 #    ports: [ "3307:3306" ]
 #    networks: [ lnpm-net ]
 
-#  pma:
-#    image: phpmyadmin/phpmyadmin:5.0.0
-#    container_name: "${PROJECT_NAME}_pma"
-#    environment:
-#      PMA_HOST: $DB_HOST
-#      PMA_USER: root
-#      PMA_PASSWORD: $DB_ROOT_PASSWORD
-#      PHP_UPLOAD_MAX_FILESIZE: 1G
-#      PHP_MAX_INPUT_VARS: 1G
-#      UPLOAD_LIMIT: 1G
-#    ports: [ "8081:80" ]
-#    networks: [ lnpm-net ]
+  # add `define( 'WP_REDIS_HOST', 'redis' );` to the `wp-config.php` file.
+  redis:
+    container_name: "${BASENAME}_redis"
+    restart: unless-stopped
+    image: redis:alpine
+    ports: [ "6379:6379" ]
+    networks: [ lnpm-net ]
 
 networks:
   lnpm-net:

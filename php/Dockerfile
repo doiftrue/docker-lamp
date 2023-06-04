@@ -4,38 +4,35 @@ FROM php:${PHP_VER}-fpm
 ARG UID=1000
 ARG GUID=1000
 ARG USER=www-data
-ARG USERDIR=/var/www
-RUN usermod -u $UID $USER && groupmod -g $GUID $USER
+ARG WORK_DIR=/var/app
 
-# Configuring OS
-RUN echo 'alias ll="ls -l --color"' >>  /etc/bash.bashrc
-RUN chown -R $USER:$USER $USERDIR
-
-RUN apt-get update
-
+RUN set -x; \
+# WORK_DIR capabilities
+    usermod -u $UID $USER; \
+    groupmod -g $GUID $USER; \
+	chown -R $USER:$USER $WORK_DIR; \
 # OS Utilities
-RUN apt-get -y install \
+    apt-get update; \
+    apt-get -y install \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
-    tree \
+    default-mysql-client \
     vim \
+    nano \
     unzip \
     zip \
     wget \
     curl \
     git \
-    nano \
-    mc
+    tree \
+    mc \
+;
 
-# PHP imagick
-RUN apt-get install -y libmagickwand-dev; \
-    pecl install imagick; \
-	docker-php-ext-enable imagick;
-
+RUN set -x; \
 # PHP Extensions
-RUN docker-php-ext-install \
+	docker-php-ext-install \
     gd \
     mysqli \
     pdo \
@@ -47,31 +44,41 @@ RUN docker-php-ext-install \
     opcache \
     exif \
     intl \
-    zip
-
-# fix memory limit for php-cli
-RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
-
+    zip \
+; \
+# PHP imagick
+	apt-get install -y libmagickwand-dev; \
+    pecl install imagick; \
+	docker-php-ext-enable imagick; \
 # Install Composer
 # See: https://getcomposer.org/download
-RUN wget https://getcomposer.org/download/2.5.5/composer.phar \
+	wget https://getcomposer.org/download/2.5.5/composer.phar \
     && chmod +x composer.phar \
-    && mv composer.phar /usr/local/bin/composer
-
+    && mv composer.phar /usr/local/bin/composer; \
 # Install WP-CLI
 # See: https://make.wordpress.org/cli/handbook/guides/installing/
 # See: https://github.com/wp-cli/wp-cli/tags
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+	wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x wp-cli.phar \
-    && mv wp-cli.phar /usr/local/bin/wp
-
-# redis
-#RUN pecl install -o -f redis \
-#    && rm -rf /tmp/pear \
-#    && docker-php-ext-enable redis
+    && mv wp-cli.phar /usr/local/bin/wp \
+    && wget https://raw.githubusercontent.com/wp-cli/wp-cli/main/utils/wp-completion.bash \
+    && mv wp-completion.bash /usr/local/include/wp-cli-completion.bash \
+    && echo -e '\nsource /usr/local/include/wp-cli-completion.bash' >>  /etc/bash.bashrc;
 
 
-WORKDIR $USERDIR
+## Configuring OS
+RUN echo 'alias ll="ls -l --color"' >> /etc/bash.bashrc; \
+# fix memory limit for php-cli
+    echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
+
+## Install cert to curl work correctly
+COPY --chmod=644 ./certs/ROOT_CA_CERT/myRootCA.pem.crt /usr/local/share/ca-certificates/
+RUN	apt-get install -y ca-certificates && update-ca-certificates
+
+WORKDIR $WORK_DIR
+
+# it's just for documentation (clearity)
+EXPOSE 9000
 
 USER $USER
 
