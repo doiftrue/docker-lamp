@@ -69,7 +69,7 @@ RUN set -x; \
 ## Configuring OS
 RUN echo 'alias ll="ls -l --color"' >> /etc/bash.bashrc; \
 # fix memory limit for php-cli
-    echo 'memory_limit = 128M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
+    echo 'memory_limit = 256M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
 
 ## Install cert to curl work correctly
 COPY --chmod=644 ./certs/ROOT_CA_CERT/myRootCA.pem.crt /usr/local/share/ca-certificates/
