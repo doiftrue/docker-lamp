@@ -60,3 +60,11 @@ goto.mysql:
 
 
 
+#### certs ####
+
+# $ make generate.cert mysite.loc
+create-cert:
+	bash certs/create-cert.sh $(filter-out $@,$(MAKECMDGOALS))
+
+
+

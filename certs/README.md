@@ -11,15 +11,14 @@ Required packeges
 Usage
 -----
 
-1. Place file `create-self-signed-cert.sh` to any directory on your computer and run it. 
-	```
-	bash ~/path/to/create-self-signed-cert.sh
-    ```
-2. Enter your local site domain name (ex. mysite.loc).
-3. Done! The self-signed certificate created for your site.
+1. Run command `bash certs/create-cert.sh example.loc` OR `make create-cert example.loc`. example.loc - is you site domain.
 
-Now You need to add the ROOT CA certificate to the global trust certificates repository of your system (ubuntu), browser, etc. (see bellow how to do that).
-Then, use a site related cert files: `.key`, `.crt` in yout Apache or Nginx configs.
+2. Done! The self-signed certificate created for your example.loc site.
+
+3. (do this spet once - for the next created certificates this step is not necessary) 
+   Add the ROOT CA certificate to the global trust certificates repository of your system (ubuntu), browser, etc. (see bellow how to do that).
+
+4. Use the site-related cert files: `.key`, `.crt` in Nginx configs.
 
 
 ### About ROOT-CA-certificate

@@ -12,5 +12,5 @@ db/
 
 # certs
 /certs/*
-!/certs/create-self-signed-cert.sh
+!/certs/create-cert.sh
 !/certs/README.md

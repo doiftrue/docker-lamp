@@ -5,7 +5,7 @@ Installation
 2. Clone this repository 
 3. Perform following commands
     - `docker-compose up -d`
-4. Add `127.0.0.1  mysite-example.loc` into the `/etc/hosts` file.
+4. Add `127.0.0.1  example.loc` into the `/etc/hosts` file.
 
 
 Add new site
