@@ -34,7 +34,7 @@ services:
 
     # specify your additional domains in `docker-compose.override.yml` file
     extra_hosts:
-      - "wptest.loc:host-gateway" # for wp-cron
+      - "example.loc:host-gateway" # for wp-cron
       - "host.docker.internal:host-gateway"
     volumes:
       - ${SITES_DIR}:/var/app:delegated
