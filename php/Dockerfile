@@ -8,44 +8,45 @@ ARG WORK_DIR=/var/app
 
 RUN set -x; \
 # WORK_DIR capabilities
-    usermod -u $UID $USER; \
-    groupmod -g $GUID $USER; \
+    usermod -u $UID $USER;          \
+    groupmod -g $GUID $USER;        \
 	chown -R $USER:$USER $WORK_DIR; \
 # OS Utilities
-    apt-get update; \
-    apt-get -y install \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    libzip-dev \
+    apt-get update;      \
+    apt-get -y install   \
+    libpng-dev           \
+    libonig-dev          \
+    libxml2-dev          \
+    libzip-dev           \
     default-mysql-client \
-    vim \
-    nano \
-    unzip \
-    zip \
-    wget \
-    curl \
-    git \
-    tree \
-    mc \
+    vim                  \
+    nano                 \
+    unzip                \
+    zip                  \
+    wget                 \
+    curl                 \
+    git                  \
+    tree                 \
+    mc                   \
+    time                 \
 ;
 
 RUN set -x; \
 # PHP Extensions
 	docker-php-ext-install \
-    calendar \
-    gd \
-    mysqli \
-    pdo \
-    #pdo_pgsql \
-    #pgsql \
-    pdo_mysql \
-    mbstring \
-    tokenizer \
-    opcache \
-    exif \
-    intl \
-    zip \
+    calendar               \
+    gd                     \
+    mysqli                 \
+    pdo                    \
+    #pdo_pgsql              \
+    #pgsql                  \
+    pdo_mysql              \
+    mbstring               \
+    tokenizer              \
+    opcache                \
+    exif                   \
+    intl                   \
+    zip                    \
 ; \
 # PHP imagick
 	apt-get install -y libmagickwand-dev; \
