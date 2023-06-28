@@ -33,6 +33,7 @@ RUN set -x; \
 RUN set -x; \
 # PHP Extensions
 	docker-php-ext-install \
+    calendar \
     gd \
     mysqli \
     pdo \
