@@ -3,7 +3,7 @@ version: "3.9"
 services:
 
   nginx:
-    container_name: "${BASENAME}_nginx"
+    container_name: "LAMP_nginx"
     restart: unless-stopped
     image: nginx:alpine
     depends_on: [ php ]
@@ -18,7 +18,7 @@ services:
     networks: [ lnpm-net ]
 
   php:
-    container_name: "${BASENAME}_php"
+    container_name: "LAMP_php"
     restart: unless-stopped
     depends_on: [ mysql ]
     image: "lamp_php"
@@ -41,7 +41,7 @@ services:
     networks: [ lnpm-net ]
 
   mysql:
-    container_name: "${BASENAME}_mysql"
+    container_name: "LAMP_mysql"
     restart: unless-stopped
     image: mysql:5.7
     command: --default-authentication-plugin=mysql_native_password
@@ -53,7 +53,7 @@ services:
     networks: [ lnpm-net ]
 
 #  mariadb:
-#    container_name: "${BASENAME}_mariadb"
+#    container_name: "LAMP_mariadb"
 #    restart: unless-stopped
 #    image: mariadb:10.8
 #    environment:
@@ -65,7 +65,7 @@ services:
 
   # add `define( 'WP_REDIS_HOST', 'redis' );` to the `wp-config.php` file.
   redis:
-    container_name: "${BASENAME}_redis"
+    container_name: "LAMP_redis"
     restart: unless-stopped
     image: redis:alpine
     ports: [ "6379:6379" ]
