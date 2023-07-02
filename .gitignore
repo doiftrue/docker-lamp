@@ -3,6 +3,10 @@
 .env
 docker-compose.override.yml
 
+# php
+/php/config.php.ini
+/php.ini
+
 # dirs
 db/
 

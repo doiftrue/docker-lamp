@@ -5,13 +5,13 @@
 dc.up:
 	docker-compose up -d
 
-dc.stop:
+dc.stop: phpmyadmin.stop
 	docker-compose stop
 
 dc.start:
 	docker-compose start
 
-dc.down:
+dc.down: phpmyadmin.stop
 	docker-compose down --remove-orphans
 
 dc.build:
@@ -29,6 +29,9 @@ goto.php:
 
 goto.php.root:
 	docker-compose exec --user=root php bash
+
+php.copy.ini:
+	docker compose cp php:"/usr/local/etc/php/php.ini" "./php.ini"
 
 
 
@@ -57,6 +60,20 @@ goto.redis:
 
 goto.mysql:
 	docker-compose exec mysql sh
+
+
+
+#### PhpMyAdmin ####
+
+# Runs phpmyadmin container
+phpmyadmin:
+	docker run --rm -d --name LAMP_phpmyadmin --network lamp-net -e PMA_HOST=mysql -e PMA_USER=root -e PMA_PASSWORD=root -p 9200:80 phpmyadmin:latest
+	@echo "Goto: http://localhost:9200"
+
+# Stops phpmyadmin container (it will be removed automatically because of --rm flag)
+# NOTE: first '-' prefix tells make to continue executing the subsequent commands even if the docker stop command fails.
+phpmyadmin.stop:
+	-docker stop LAMP_phpmyadmin
 
 
 

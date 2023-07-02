@@ -1,3 +1,7 @@
+##
+## @var $PHP_INI_DIR eg: /usr/local/etc/php
+## @var $PHP_VERSION eg: 7.4.33
+##
 ARG PHP_VER
 FROM php:${PHP_VER}-fpm
 
@@ -68,10 +72,11 @@ RUN set -x; \
     && echo -e '\nsource /usr/local/include/wp-cli-completion.bash' >>  /etc/bash.bashrc;
 
 
-## Configuring OS
+## Configuration
 RUN echo 'alias ll="ls -l --color"' >> /etc/bash.bashrc; \
-# fix memory limit for php-cli
-    echo 'memory_limit = 256M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
+# Use the default PHP configuration.  \
+# IMPORTANT: Use `php.ini-production` file for Prod env.
+	cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini";
 
 ## Install cert to curl work correctly
 COPY --chmod=644 ./certs/ROOT_CA_CERT/myRootCA.pem.crt /usr/local/share/ca-certificates/
