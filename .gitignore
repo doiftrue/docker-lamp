@@ -5,7 +5,7 @@ docker-compose.override.yml
 
 # php
 /php/config.php.ini
-/php.ini
+/php/php.ini
 
 # dirs
 db/
