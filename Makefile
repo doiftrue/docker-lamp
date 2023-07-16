@@ -37,6 +37,9 @@ php.copy.ini:
 
 #### Composer ####
 
+# $ make composer install
+# $ make composer update
+# $ make goto.php >>> $ composer update -o
 composer:
 	docker-compose exec php composer $(filter-out $@,$(MAKECMDGOALS))
 
@@ -79,7 +82,7 @@ phpmyadmin.stop:
 
 #### certs ####
 
-# $ make generate.cert example.loc
+# $ make create-cert example.loc
 create-cert:
 	bash certs/create-cert.sh $(filter-out $@,$(MAKECMDGOALS))
 
