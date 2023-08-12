@@ -15,6 +15,8 @@ RUN set -x; \
     usermod -u $UID $USER;          \
     groupmod -g $GUID $USER;        \
 	chown -R $USER:$USER $WORK_DIR; \
+# Set USER for default WORK_DIR to composer and other libs has access
+	chown -R $USER:$USER /var/www;  \
 # OS Utilities
     apt-get update;      \
     apt-get -y install   \
