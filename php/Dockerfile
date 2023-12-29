@@ -41,6 +41,7 @@ RUN set -x; \
 # PHP Extensions
 	docker-php-ext-install \
 	calendar               \
+	bcmath                 \
 	gd                     \
 	mysqli                 \
 	pdo                    \
