@@ -75,3 +75,5 @@ Use one of command:
     nginx -T           # Test & Dump config
     nginx -s reload    # reload the configuration file
     nginx -s quit      # graceful shutdown
+
+NOTE: fastcgi_params see inside container `/etc/nginx/fastcgi_params`.
