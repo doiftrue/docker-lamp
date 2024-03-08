@@ -32,7 +32,7 @@ Adding the ROOT CA (myRootCA.pem) to the trust store is required to all further 
 
 #### Adding ROOT-CA to Ubuntu
 
-Copy your certificate in `.pem` format (the format that has ----BEGIN CERTIFICATE---- in it) into `/usr/local/share/ca-certificates` and name it with a `.crt` file extension. Then run `sudo update-ca-certificates`.
+Copy certificate with `.pem` format (the format that has ----BEGIN CERTIFICATE---- in it) into `/usr/local/share/ca-certificates` and name it with a `.crt` file extension. Then run `sudo update-ca-certificates`.
 
 	$ sudo apt-get install -y ca-certificates
 	$ sudo cp ./ROOT_CA_CERT/myRootCA.pem /usr/local/share/ca-certificates/myRootCA.pem.crt
@@ -51,8 +51,10 @@ OR using interactive variant (not recomended):
 #### Adding ROOT-CA to Google Chrome
 
 1. Goto `chrome://settings/certificates` - place this string into the main Google Chrome search field. Or go to `Settings > Privacy and security > Security > Manage sertificates`.
-2. Now you need to go to `Authorities` tab and import the ROOT CA Certificate (myRootCA.crt) to the repository.
-3. Done! Now any cert you create for any site will work in Google Chrome, because it signed with ROOT-CA that is in trusted repository.
+2. Goto `Authorities` tab and import the ROOT CA Certificate (myRootCA.crt) to the repository.
+3. Done! 
+
+Now any cert you create for any new site will work in Google Chrome, because it signed with ROOT-CA that is already in trusted repository.
 
 See also: https://support.securly.com/hc/en-us/articles/206081828-How-do-I-manually-install-the-Securly-SSL-certificate-in-Chrome-
 
@@ -62,7 +64,7 @@ See also: https://support.securly.com/hc/en-us/articles/206081828-How-do-I-manua
 1. Goto `about:preferences#privacy` - place this string into the main Firefox search field. Or go to `Settings > Privacy and security`.
 2. Scroll down to `Security` section click `View Certificates` button and select `Authorities` tab in the appeared popup window.
 3. Import the ROOT CA Certificate (myRootCA.crt) to the repository.
-4. Done! Now any cert you create for any site will work in Firefox.
+4. Done!
 
 See also: https://docs.vmware.com/en/VMware-Adapter-for-SAP-Landscape-Management/2.1.0/Installation-and-Administration-Guide-for-VLA-Administrators/GUID-0CED691F-79D3-43A4-B90D-CD97650C13A0.html
 

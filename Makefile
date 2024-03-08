@@ -1,4 +1,10 @@
-#SOMEVAR='bar'
+-include Makefile-extend.mk
+
+# Handle the case where we accidentally run `$ make` without target (the second parameter)
+.DEFAULT_GOAL := default
+default:
+	@echo 'No target specified for make command.'
+
 
 #### Docker ####
 
