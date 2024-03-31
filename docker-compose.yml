@@ -38,7 +38,8 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - ${SITES_DIR}:/var/app:delegated
-      - ./php/config.php.ini:/usr/local/etc/php/conf.d/config.php.ini
+      - ./php/config.php.ini:/usr/local/etc/php/conf.d/zz_config.php.ini
+      - ./php/.bash_history:/var/www/.bash_history
     networks: [ lamp-net ]
 
   mysql:

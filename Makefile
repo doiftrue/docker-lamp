@@ -20,11 +20,13 @@ dc.start:
 dc.down: phpmyadmin.stop
 	docker-compose down --remove-orphans
 
-dc.build:
-	docker-compose build --force-rm && docker-compose up -d
-
+dc.restart: dc.recreate
 dc.recreate:
-	make dc.down && docker-compose build --force-rm --pull && docker-compose up -d
+	docker-compose up --no-deps -d --force-recreate
+
+dc.build: dc.rebuild
+dc.rebuild:
+	docker-compose up --no-deps -d --build
 
 
 
@@ -37,7 +39,7 @@ goto.php.root:
 	docker-compose exec --user=root php bash
 
 php.copy.ini:
-	docker compose cp php:"/usr/local/etc/php/php.ini" "./php.ini"
+	docker compose cp php:"/usr/local/etc/php/php.ini" "./php/php.ini"
 
 
 

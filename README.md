@@ -4,9 +4,13 @@ Installation
 1. Install Docker
 2. Clone this repository 
 3. Perform following commands:
-    - `make create-cert example.loc`
-    - `make dc.up`
-    - `cp .env.sample .env`
+   ```
+   touch php/config.php.ini
+   touch php/.bash_history
+   cp .env.sample .env
+   make create-cert example.loc
+   make dc.up
+   ```
 4. Add `127.0.0.1  example.loc` into the `/etc/hosts` system file. 
    On Windows this file located in: `C:\Windows\System32\Drivers\etc\hosts`.
 5. Done!
@@ -47,6 +51,39 @@ PHP
 Go into the container:
 
     make goto.php
+
+
+xDebug
+------
+- See all parameters: https://xdebug.org/docs/all_settings
+- See: [Upgrading from Xdebug 2 to 3](https://xdebug.org/docs/upgrade_guide)
+- See: https://xdebug.org/docs/all_settings#xdebug.start_with_request
+
+To enable xdebug just add config into `php/config.php.ini` file:
+```ini
+[xdebug]
+xdebug.mode = debug
+xdebug.start_with_request = default
+xdebug.client_host = host.docker.internal
+xdebug.client_port = 9003
+xdebug.idekey = PHPSTORM
+```
+
+To view current values run:
+```shell
+php -i | grep xdebug
+```
+
+Or call php function:
+```php
+xdebug_info(); exit;
+```
+
+To trigger xdebug under WP-CLI use:
+```shell
+XDEBUG_TRIGGER=1 wp plugin list
+```
+
 
 
 Redis
