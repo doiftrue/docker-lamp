@@ -9,34 +9,32 @@ default:
 #### Docker ####
 
 dc.up:
-	docker-compose up -d
+	docker compose up -d
 
 dc.stop: phpmyadmin.stop
-	docker-compose stop
+	docker compose stop
 
 dc.start:
-	docker-compose start
+	docker compose start
 
 dc.down: phpmyadmin.stop
-	docker-compose down --remove-orphans
+	docker compose down --remove-orphans
 
-dc.restart: dc.recreate
 dc.recreate:
-	docker-compose up --no-deps -d --force-recreate
+	docker compose up --no-deps -d --force-recreate
 
-dc.build: dc.rebuild
 dc.rebuild:
-	docker-compose up --no-deps -d --build
+	docker compose up --no-deps -d --build
 
 
 
 #### PHP ####
 
 goto.php:
-	docker-compose exec php bash
+	docker compose exec php bash
 
 goto.php.root:
-	docker-compose exec --user=root php bash
+	docker compose exec --user=root php bash
 
 php.copy.ini:
 	docker compose cp php:"/usr/local/etc/php/php.ini" "./php/php.ini"
@@ -49,28 +47,28 @@ php.copy.ini:
 # $ make composer update
 # $ make goto.php >>> $ composer update -o
 composer:
-	docker-compose exec php composer $(filter-out $@,$(MAKECMDGOALS))
+	docker compose exec php composer $(filter-out $@,$(MAKECMDGOALS))
 
 
 
 #### Nginx ####
 
 goto.nginx:
-	docker-compose exec nginx sh
+	docker compose exec nginx sh
 
 
 
 #### Redis ####
 
 goto.redis:
-	docker-compose exec redis sh
+	docker compose exec redis sh
 
 
 
 #### mysql ####
 
 goto.mysql:
-	docker-compose exec mysql sh
+	docker compose exec mysql sh
 
 
 
