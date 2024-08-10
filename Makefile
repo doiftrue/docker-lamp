@@ -94,3 +94,10 @@ create-cert:
 
 
 
+##########################
+# Logs
+##########################
+
+log.nginx: # see access log
+	docker compose logs -f nginx
+
