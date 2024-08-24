@@ -8,32 +8,32 @@ default:
 
 #### Docker ####
 
-dc.up:
+d.up:
 	docker compose up -d
 
-dc.stop: phpmyadmin.stop
+d.stop: phpmyadmin.stop
 	docker compose stop
 
-dc.start:
+d.start:
 	docker compose start
 
-dc.down: phpmyadmin.stop
+d.down: phpmyadmin.stop
 	docker compose down --remove-orphans
 
-dc.recreate:
+d.recreate:
 	docker compose up --no-deps -d --force-recreate
 
-dc.rebuild:
+d.rebuild:
 	docker compose up --no-deps -d --build
 
 
 
 #### PHP ####
 
-goto.php:
+php.connect:
 	docker compose exec php bash
 
-goto.php.root:
+php.connect.root:
 	docker compose exec --user=root php bash
 
 php.copy.ini:
@@ -53,21 +53,21 @@ composer:
 
 #### Nginx ####
 
-goto.nginx:
+nginx.connect:
 	docker compose exec nginx sh
 
 
 
 #### Redis ####
 
-goto.redis:
+redis.connect:
 	docker compose exec redis sh
 
 
 
 #### mysql ####
 
-goto.mysql:
+mysql.connect:
 	docker compose exec mysql sh
 
 
