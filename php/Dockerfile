@@ -23,46 +23,50 @@ RUN set -x; \
     cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini";
 
 
-# OS Utilities
+## OS Utilities
 RUN set -x; \
-	apt-get update;      \
-	apt-get -y install   \
-	libpng-dev           \
-	libonig-dev          \
-	libxml2-dev          \
-	libzip-dev           \
-	default-mysql-client \
-	vim                  \
-	nano                 \
-	unzip                \
-	zip                  \
-	wget                 \
-	curl                 \
-	git                  \
-	tree                 \
-	mc                   \
-	time                 \
+	apt-get update; \
+	apt-get -y install \
+		libpng-dev           \
+		libonig-dev          \
+		libxml2-dev          \
+		libzip-dev           \
+		default-mysql-client \
+		vim                  \
+		nano                 \
+		unzip                \
+		zip                  \
+		wget                 \
+		curl                 \
+		git                  \
+		tree                 \
+		mc                   \
+		time                 \
 ;
 
-# PHP Extensions
-RUN docker-php-ext-install \
-	calendar               \
-	bcmath                 \
-	gd                     \
-	mysqli                 \
-	pdo                    \
-	pdo_mysql              \
-	mbstring               \
-	tokenizer              \
-	opcache                \
-	exif                   \
-	intl                   \
-	zip                    \
-; \
-# Install Imagick
-	apt-get -y install libmagickwand-dev; \
-	pecl install imagick; \
-	docker-php-ext-enable imagick; \
+## PHP Extensions
+RUN curl -sSLf -o /usr/local/bin/install-php-extensions \
+	https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
+	chmod +x /usr/local/bin/install-php-extensions; \
+	install-php-extensions \
+		opcache            \
+		xdebug             \
+		mysqli             \
+		pdo                \
+		pdo_mysql          \
+		redis              \
+		gd                 \
+		imagick            \
+		tokenizer          \
+		calendar           \
+		bcmath             \
+		mbstring           \
+		exif               \
+		intl               \
+		zip                \
+;
+
+RUN set -ex; \
 # Install Composer
 # See: https://getcomposer.org/download
 	wget https://getcomposer.org/download/latest-stable/composer.phar \
@@ -76,28 +80,30 @@ RUN docker-php-ext-install \
 	&& mv wp-cli.phar /usr/local/bin/wp \
 	&& wget https://raw.githubusercontent.com/wp-cli/wp-cli/main/utils/wp-completion.bash \
 	&& mv wp-completion.bash /usr/local/include/wp-cli-completion.bash \
-	&& echo 'source /usr/local/include/wp-cli-completion.bash' >>  /etc/bash.bashrc; \
-# Install xDebug
-	yes | pecl install xdebug; \
-    { \
-        echo 'zend_extension=xdebug'; \
-        echo 'xdebug.mode=off'; \
-        echo 'xdebug.client_host=host.docker.internal'; \
-        echo 'xdebug.client_port=9003'; \
-    } > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini;
+	&& echo 'source /usr/local/include/wp-cli-completion.bash' >>  /etc/bash.bashrc;
+
+## Additional config
+RUN set -ex; \
+# .bashrc
+	{ \
+		echo '# Aliases'; \
+		echo 'alias ll="ls -alh --color"'; \
+		echo '# Git auto-completion'; \
+		echo 'source /usr/share/bash-completion/completions/git'; \
+	} >> /etc/bash.bashrc; \
+# xDebug default config
+# See: https://xdebug.org/docs/all_settings
+	{ \
+		echo 'xdebug.mode=off'; \
+		echo 'xdebug.client_host=host.docker.internal'; \
+		echo 'xdebug.client_port=9003'; \
+	} >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini;
 
 
 ## Install RootCA certificate for the CURL work correctly
 COPY --chmod=644 ./certs/ROOT_CA_CERT/myRootCA.pem.crt /usr/local/share/ca-certificates/
 RUN	apt-get install -y ca-certificates && update-ca-certificates
 
-## Additional config
-RUN { \
-        echo '# Aliases'; \
-        echo 'alias ll="ls -alh --color"'; \
-        echo '# Git auto-completion'; \
-        echo 'source /usr/share/bash-completion/completions/git'; \
-    } >> /etc/bash.bashrc;
 
 WORKDIR $WORK_DIR
 

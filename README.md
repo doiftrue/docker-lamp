@@ -84,6 +84,27 @@ To trigger xdebug under WP-CLI use:
 XDEBUG_TRIGGER=1 wp plugin list
 ```
 
+### xDebug profiling
+
+config.php.ini:
+```
+xdebug.mode = profile
+xdebug.output_dir = /var/app/_tmp_docker_lamp_xdebug_profiles
+xdebug.profiler_output_name = cachegrind.%R.%u
+;xdebug.trigger_value = ""
+```
+
+Viewer programm KCacheGrind. Install for ubuntu:
+```shell
+sudo apt install kcachegrind
+sudo apt install graphviz
+```
+Check that graphviz installed correctly
+```
+dot -V
+```
+
+
 
 
 Redis

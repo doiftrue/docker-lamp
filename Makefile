@@ -36,7 +36,7 @@ php.connect:
 php.connect.root:
 	docker compose exec --user=root php bash
 
-php.copy.ini:
+php.ini.copy:
 	docker compose cp php:"/usr/local/etc/php/php.ini" "./php/php.ini"
 
 
