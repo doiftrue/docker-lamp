@@ -9,7 +9,7 @@ Installation
    touch php/.bash_history
    cp .env.sample .env
    make create-cert example.loc
-   make dc.up
+   make d.up
    ```
 4. Add `127.0.0.1  example.loc` into the `/etc/hosts` system file. 
    On Windows this file located in: `C:\Windows\System32\Drivers\etc\hosts`.
@@ -33,7 +33,7 @@ Here you need to use one of examples from `nginx/sites-enabled-examples/`:
 1. Add `mysite.loc` to system `hosts` file: `127.0.0.1  mysite.loc`.
 2. Copy `example.conf` file to the `nginx/sites-enabled` folder.
 3. Rename `example.conf` to `mysite.loc.conf` (it's not necessary, but it's more convenient for you.).
-4. Restart docker containers: `$ make dc.down && make dc.up` to add new file to the nginx config inside container.
+4. Restart docker containers: `$ make d.down && make d.up` to add new file to the nginx config inside container.
 5. Done! Goto `http://mysite.loc`.
 
 ### Option 3 (https, SSL)

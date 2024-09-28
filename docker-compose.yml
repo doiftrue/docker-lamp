@@ -26,7 +26,6 @@ services:
       dockerfile: php/Dockerfile
       args:
         PHP_VER: ${PHP_VER}
-
     # specify your additional domains in `docker-compose.override.yml` file
     extra_hosts:
       - "example.loc:host-gateway" # for wp-cron
