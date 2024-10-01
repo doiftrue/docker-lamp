@@ -26,8 +26,8 @@ services:
       dockerfile: php/Dockerfile
       args:
         PHP_VER: ${PHP_VER}
-    # specify your additional domains in `docker-compose.override.yml` file
     extra_hosts:
+      # Specify your additional domains in `docker-compose.override.yml` file
       - "example.loc:host-gateway" # for wp-cron
       - "host.docker.internal:host-gateway"
     volumes:
