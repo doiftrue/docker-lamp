@@ -24,7 +24,7 @@ RUN set -x; \
 
 
 ## OS Utilities
-RUN set -x; \
+RUN set -xe; \
 	apt-get update; \
 	apt-get -y install \
 		libpng-dev           \
@@ -42,6 +42,9 @@ RUN set -x; \
 		tree                 \
 		mc                   \
 		time                 \
+		htop                 \
+		msmtp                \
+		msmtp-mta            \
 ;
 
 ## PHP Extensions

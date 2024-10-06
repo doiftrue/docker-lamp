@@ -33,6 +33,7 @@ services:
     volumes:
       - ${SITES_DIR}:/var/app:delegated
       - ./php/config.php.ini:/usr/local/etc/php/conf.d/zz_config.php.ini
+      - ./php/msmtprc.ini:/etc/msmtprc:ro
       - ./php/.bash_history:/var/www/.bash_history
     networks: [ lamp-net ]
 
@@ -66,6 +67,19 @@ services:
     image: redis:alpine
     ports: [ "6379:6379" ]
     networks: [ lamp-net ]
+
+#  # SMPT server for sending emails
+#  mailpit:
+#    container_name: "LAMP_mailpit"
+#    restart: unless-stopped
+#    image: axllent/mailpit
+#    ports: [ "8025:8025" ]
+#    environment:
+#      - MP_DATABASE=/data/mailpit.db
+#    volumes:
+#      - ./db/mailpit-data:/data
+#    networks: [ lamp-net ]
+
 
 networks:
   lamp-net:

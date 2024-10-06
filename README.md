@@ -147,3 +147,26 @@ Use one of command:
     nginx -s quit      # graceful shutdown
 
 NOTE: fastcgi_params see inside container `/etc/nginx/fastcgi_params`.
+
+
+Mail testing
+------------
+To test mailing on site the mailpit is used. As it neede by demand it wasn't added into the main docker-compose file. So You need to run it (its container) separatelly using the following make command:
+
+	$ make mailpit
+
+Then goto <http://localhost:8025> 
+
+**Additional info:**
+
+> "Mailpit" is a lightweight, self-hosted email testing tool that simulates an SMTP server and provides a web interface for viewing and testing email deliveries.
+
+> "msmtp" is a lightweight SMTP client used to send emails from the command line or scripts. It acts as an SMTP relay, forwarding emails to a specified SMTP server. It's often used in Unix-based systems as a simpler alternative to more complex mail transfer agents (MTAs) like sendmail or postfix.
+
+PHP container is configured to use "msmtp" client to send emails. So, all emails sent from php will be catched by "mailpit" by default. For this porpouse the "msmtp" and "msmtp-mta" packages are added into php image (Dokerfile). 
+
+> The "msmtp-mta" a drop-in replacement for traditional Mail Transfer Agents (MTAs) like "sendmail" or "postfix". This allows programs that expect a sendmail binary to send emails using "msmtp" without changing the configuration. For example PHP's mail() function.
+
+The "msmtp" is configured to use "mailpit" as SMTP server.
+
+You can change config of "msmtp" in the following file `./php/msmtprc.ini`. After any changes you need to recreate the php container: run `$ make d.recreate`.
