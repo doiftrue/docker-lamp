@@ -6,7 +6,6 @@ Installation
 3. Perform following commands:
    ```
    touch php/config.php.ini
-   touch php/.bash_history
    cp .env.sample .env
    make create-cert example.loc
    make d.up

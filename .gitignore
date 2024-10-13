@@ -1,15 +1,18 @@
 # files
-.idea
-.env
-docker-compose.override.yml
+/.idea
+/.env
+/docker-compose.override.yml
+
+# dirs
+/db/
+
+# tmp
+/_tmp/*
+!/_tmp/.gitkeep
 
 # php
 /php/config.php.ini
 /php/php.ini
-/php/.bash_history
-
-# dirs
-db/
 
 # nginx
 /nginx/sites-enabled/*

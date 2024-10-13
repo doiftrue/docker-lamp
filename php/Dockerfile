@@ -83,16 +83,22 @@ RUN set -ex; \
 	&& mv wp-cli.phar /usr/local/bin/wp \
 	&& wget https://raw.githubusercontent.com/wp-cli/wp-cli/main/utils/wp-completion.bash \
 	&& mv wp-completion.bash /usr/local/include/wp-cli-completion.bash \
-	&& echo 'source /usr/local/include/wp-cli-completion.bash' >>  /etc/bash.bashrc;
+	&& echo '\n\nsource /usr/local/include/wp-cli-completion.bash' >>  /etc/bash.bashrc;
+
+## Install RootCA certificate for the CURL work correctly
+COPY --chmod=644 ./certs/ROOT_CA_CERT/myRootCA.pem.crt /usr/local/share/ca-certificates/
+RUN	apt-get install -y ca-certificates && update-ca-certificates
 
 ## Additional config
 RUN set -ex; \
 # .bashrc
 	{ \
-		echo '# Aliases'; \
+		echo '\n## Aliases'; \
 		echo 'alias ll="ls -alh --color"'; \
-		echo '# Git auto-completion'; \
+		echo '\n## Git auto-completion'; \
 		echo 'source /usr/share/bash-completion/completions/git'; \
+    	echo '\n## Save the command history after each command (not only at the end of the session)'; \
+		echo 'PROMPT_COMMAND="history -a; ${PROMPT_COMMAND:-}"'; \
 	} >> /etc/bash.bashrc; \
 # xDebug default config
 # See: https://xdebug.org/docs/all_settings
@@ -103,16 +109,9 @@ RUN set -ex; \
 	} >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini;
 
 
-## Install RootCA certificate for the CURL work correctly
-COPY --chmod=644 ./certs/ROOT_CA_CERT/myRootCA.pem.crt /usr/local/share/ca-certificates/
-RUN	apt-get install -y ca-certificates && update-ca-certificates
-
-
 WORKDIR $WORK_DIR
-
-# it's just for documentation (clearity)
-EXPOSE 9000
 
 USER $USER
 
-
+# it's just for documentation (clearity)
+EXPOSE 9000

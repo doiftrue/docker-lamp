@@ -34,7 +34,9 @@ services:
       - ${SITES_DIR}:/var/app:delegated
       - ./php/config.php.ini:/usr/local/etc/php/conf.d/zz_config.php.ini
       - ./php/msmtprc.ini:/etc/msmtprc:ro
-      - ./php/.bash_history:/var/www/.bash_history
+      - ./_tmp/:/var/www/_tmp
+    environment:
+      HISTFILE: /var/www/_tmp/.bash_history # change the default location of the bash history file
     networks: [ lamp-net ]
 
   mysql:
